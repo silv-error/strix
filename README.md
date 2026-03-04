@@ -17,6 +17,7 @@ python main.py
 ```
 
 Or with token as argument:
+
 ```bash
 python main.py YOUR_BOT_TOKEN
 ```

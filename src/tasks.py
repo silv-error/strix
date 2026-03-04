@@ -169,6 +169,10 @@ def setup_background_tasks(bot):
             print(f"✅ Check complete - {total_kicked} member(s) kicked")
         else:
             print(f"✅ Check complete - no kicks needed")
+        
+        # Update bot status after each check
+        total_unverified = sum(len(members) for members in bot.unverified_members.values())
+        await bot.change_presence(activity=discord.Game(name=f"🔍 Protecting • {total_unverified} pending"))
     
     @check_unverified_task.before_loop
     async def before_check_loop():
