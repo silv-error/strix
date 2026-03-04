@@ -336,13 +336,26 @@ def register_slash_commands(bot):
         
         allowed_roles = config.get('allowed_roles', [])
         
+        # Filter out deleted roles and keep only existing ones
+        existing_roles = []
+        for role_name in allowed_roles:
+            role = discord.utils.get(interaction.guild.roles, name=role_name)
+            if role:
+                existing_roles.append(role_name)
+        
+        # Update config if any roles were deleted
+        if len(existing_roles) != len(allowed_roles):
+            config['allowed_roles'] = existing_roles
+            bot.guild_configs[guild_id] = config
+            bot.save_data()
+        
         embed = discord.Embed(
             title="👥 Staff Roles with Bot Permissions",
             color=COLOR_INFO
         )
         
-        if allowed_roles:
-            roles_list = "\n".join([f"• `{role}`" for role in allowed_roles])
+        if existing_roles:
+            roles_list = "\n".join([f"• `{role}`" for role in existing_roles])
             embed.add_field(name="Staff Roles", value=roles_list, inline=False)
         else:
             embed.add_field(name="Staff Roles", value="❌ None configured\n\nOnly Administrators can use bot commands.", inline=False)
