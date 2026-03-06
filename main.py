@@ -56,14 +56,6 @@ def main():
         print('💡 Use /help or !autokick_help for all commands')
         print('=' * 50)
         
-        # Calculate total unverified members across all guilds
-        total_unverified = sum(len(members) for members in bot.unverified_members.values())
-        
-        # Set bot status with unverified count
-        await bot.change_presence(
-            activity=discord.Game(name=f"🔍 Protecting servers • {total_unverified} pending verifications")
-        )
-        
         # Scan existing members
         await scan_existing_members(bot)
     
